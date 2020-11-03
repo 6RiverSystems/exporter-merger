@@ -64,6 +64,11 @@ func (app *App) Bind(cmd *cobra.Command) {
 		"Listen port for the HTTP server. (ENV:MERGER_PORT)")
 	app.viper.BindPFlag("port", cmd.PersistentFlags().Lookup("listen-port"))
 
+	cmd.PersistentFlags().String(
+		"listen-ip", "0.0.0.0",
+		"Listen IP for the HTTP server.(ENV:MERGER_IP)")
+	app.viper.BindPFlag("ip", cmd.PersistentFlags().Lookup("listen-ip"))
+
 	cmd.PersistentFlags().Int(
 		"exporters-timeout", 10,
 		"HTTP client timeout for connecting to exporters. (ENV:MERGER_EXPORTERSTIMEOUT)")
@@ -83,8 +88,9 @@ func (app *App) run(cmd *cobra.Command, args []string) {
 	})
 
 	port := app.viper.GetInt("port")
-	log.Infof("starting HTTP server on port %d", port)
-	err := http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	ip := app.viper.GetString("ip")
+	log.Infof("starting HTTP server on %s:%d", ip, port)
+	err := http.ListenAndServe(fmt.Sprintf("%s:%d", ip, port), nil)
 	if err != nil {
 		log.Fatal(err)
 	}

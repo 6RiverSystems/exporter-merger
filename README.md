@@ -31,7 +31,7 @@ exporters:
 To start the exporter:
 
 ```
-exporter-merger --config-path merger.yaml --listen-port 8080
+exporter-merger --config-path merger.yaml --listen-ip 10.100.1.2 --listen-port 8080
 ```
 
 ### Environment variables
